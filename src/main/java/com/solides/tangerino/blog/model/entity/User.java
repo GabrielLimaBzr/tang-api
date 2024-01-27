@@ -1,5 +1,6 @@
 package com.solides.tangerino.blog.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.solides.tangerino.blog.model.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -39,16 +40,17 @@ public class User implements UserDetails {
     private String passphrase;
 
     @CreatedDate
+    @JsonIgnore
     @Column(name = "DT_CREATED")
     private LocalDateTime created;
 
-    @Column(name = "STR_ROLE", nullable = false, columnDefinition = "DEFAULT 'DEFAULT'")
+    @Column(name = "INT_ROLE", nullable = false)
+    @Enumerated(EnumType.ORDINAL)
     private UserRole role;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // Autorizacao simples não ha necessidade de verificar outras roles
-        return List.of(new SimpleGrantedAuthority("ROLE_DEFAULT"));
+        return List.of(new SimpleGrantedAuthority(this.role.name()));
     }
 
     @Override
