@@ -42,7 +42,7 @@ public class User implements UserDetails {
     @Column(name = "DT_CREATED")
     private LocalDateTime created;
 
-    @Column(name = "INT_ROLE", nullable = false)
+    @Column(name = "STR_ROLE", nullable = false, columnDefinition = "DEFAULT 'DEFAULT'")
     private UserRole role;
 
     @Override
