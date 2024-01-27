@@ -1,5 +1,6 @@
 package com.solides.tangerino.blog.handlers;
 
+import com.solides.tangerino.blog.exceptions.BusinessException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
@@ -11,9 +12,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class ResponseExceptionHandler {
 
-    @ExceptionHandler({NegocioException.class})
-    public ResponseEntity<Object> handleNegocioException(NegocioException ex) {
+    @ExceptionHandler({BusinessException.class})
+    public ResponseEntity<Object> handleBusinessException(BusinessException ex) {
         return ResponseEntity.badRequest()
-                .body(new ErrorDTO(ex.getMessage(), HttpStatus.BAD_REQUEST.value()));
+                .body(new CustomExceptionResponse(ex.getMessage(), HttpStatus.BAD_REQUEST.value()));
     }
 }
