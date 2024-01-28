@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.solides.tangerino.blog.model.entity.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -18,11 +19,11 @@ public class JwtTokenService {
     @Value("${api.security.token.hours_to_expire}")
     private int hoursToExpire;
 
-    public String createJwtToken(String login) {
+    public String createJwtToken(User user) {
         try {
             return JWT.create()
                     .withIssuer("tang-api")
-                    .withSubject(login)
+                    .withSubject(user.getLogin())
                     .withIssuedAt(LocalDateTime.now().toInstant(ZoneOffset.of("-03:00")))
                     .withExpiresAt(LocalDateTime.now().plusHours(hoursToExpire).toInstant(ZoneOffset.of("-03:00")))
                     .sign(getAlgorithm(secretKey));
