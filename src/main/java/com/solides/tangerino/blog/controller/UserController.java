@@ -36,7 +36,7 @@ public class UserController {
 
     @Operation(summary = "Authenticate user")
     @PostMapping("auth")
-    public ResponseEntity<String> authenticateUser(@RequestBody @Valid AuthUserDTO authUserDTO) {
+    public ResponseEntity authenticateUser(@RequestBody @Valid AuthUserDTO authUserDTO) {
         return ResponseEntity.ok().header("Token", authService.authUser(authUserDTO)).build();
     }
 

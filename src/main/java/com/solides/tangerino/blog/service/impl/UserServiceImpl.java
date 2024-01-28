@@ -35,8 +35,6 @@ public class UserServiceImpl implements UserService {
         entity.setPassphrase(passwordEncoder.encode(entity.getPassphrase()));
         entity.setRole(UserRole.DEFAULT);
 
-        System.out.println(entity);
-
         result.setLogin(userRepository.save(entity).getLogin());
 
         return result;
