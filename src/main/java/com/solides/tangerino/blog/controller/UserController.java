@@ -4,7 +4,6 @@ import com.solides.tangerino.blog.dto.AuthUserDTO;
 import com.solides.tangerino.blog.dto.CreateUserDTO;
 import com.solides.tangerino.blog.dto.CreateUserResponseDTO;
 import com.solides.tangerino.blog.exceptions.BusinessException;
-import com.solides.tangerino.blog.service.AuthService;
 import com.solides.tangerino.blog.service.UserService;
 import com.solides.tangerino.blog.service.impl.AuthServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
@@ -36,8 +35,8 @@ public class UserController {
 
     @Operation(summary = "Authenticate user")
     @PostMapping("auth")
-    public ResponseEntity authenticateUser(@RequestBody @Valid AuthUserDTO authUserDTO) {
-        return ResponseEntity.ok().header("Token", authService.authUser(authUserDTO)).build();
+    public ResponseEntity<String> authenticateUser(@RequestBody @Valid AuthUserDTO authUserDTO) {
+        return ResponseEntity.ok().body(authService.authUser(authUserDTO));
     }
 
 }
