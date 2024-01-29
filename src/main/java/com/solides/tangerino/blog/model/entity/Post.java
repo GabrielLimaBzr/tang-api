@@ -27,8 +27,7 @@ public class Post {
     @Column(name = "STR_CONTENT", nullable = false)
     private String content;
 
-    @Column(name = "INT_USER_ID", nullable = false)
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "INT_ID_USER", referencedColumnName = "INT_ID_USER", nullable = false, insertable = false, updatable = false)
     private User user;
 

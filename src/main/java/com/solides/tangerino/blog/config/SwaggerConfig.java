@@ -9,6 +9,10 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @OpenAPIDefinition(info = @Info(title = "TANG API", version = "1.0", description = "API TANG Blog"))
-@SecurityScheme(name = "JWT", bearerFormat = "JWT", scheme = "bearer", type = SecuritySchemeType.HTTP, in = SecuritySchemeIn.HEADER)
+@SecurityScheme(name = "Bearer Authentication",
+        bearerFormat = "JWT",
+        scheme = "bearer",
+        type = SecuritySchemeType.HTTP,
+        in = SecuritySchemeIn.HEADER)
 public class SwaggerConfig {
 }

@@ -10,10 +10,10 @@ import lombok.Setter;
 public class AuthUserDTO {
 
     @NotEmpty(message = "O campo login é obrigatório")
-    @Schema(description = "Login do usuário", example = "teste")
+    @Schema(description = "Login do usuário", example = "loginuser10")
     private String login;
 
     @NotEmpty(message = "O campo senha é obrigatório")
-    @Schema(description = "Senha do usuário", example = "teste")
+    @Schema(description = "Senha do usuário", example = "string")
     private String passphrase;
 }
