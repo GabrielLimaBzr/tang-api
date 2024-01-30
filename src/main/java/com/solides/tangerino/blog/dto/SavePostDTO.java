@@ -5,9 +5,10 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CreatePostResponseDTO {
+public class SavePostDTO extends CreatePostDTO {
 
-    private Long id;
+    private long id;
 
-    private String title;
+    private String content;
+
 }

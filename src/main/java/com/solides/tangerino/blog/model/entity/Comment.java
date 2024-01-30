@@ -1,7 +1,6 @@
 package com.solides.tangerino.blog.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.solides.tangerino.blog.model.enums.PostStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,30 +14,26 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @EntityListeners(AuditingEntityListener.class)
-public class Post {
+public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "INT_ID_POST", nullable = false)
+    @Column(name = "INT_ID_COMMENT", nullable = false)
     private Long id;
 
-    @Column(name = "STR_TITLE", nullable = false, length = 200)
-    private String title;
-
-    @Column(name = "STR_CONTENT", nullable = true)
+    @Column(name = "STR_CONTENT", nullable = false, length = 200)
     private String content;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "INT_ID_USER", referencedColumnName = "INT_ID_USER", nullable = false, updatable = false)
     private User user;
 
-    @Column(name = "INT_ROLE", nullable = false)
-    @Enumerated(EnumType.ORDINAL)
-    private PostStatus status;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "INT_ID_POST", referencedColumnName = "INT_ID_POST", nullable = false, updatable = false)
+    private Post post;
 
     @CreatedDate
     @JsonIgnore
     @Column(name = "DT_CREATED")
     private LocalDateTime created;
-
 }

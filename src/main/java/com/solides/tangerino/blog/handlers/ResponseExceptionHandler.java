@@ -1,6 +1,7 @@
 package com.solides.tangerino.blog.handlers;
 
 import com.solides.tangerino.blog.exceptions.BusinessException;
+import com.solides.tangerino.blog.exceptions.NotFoundException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
@@ -22,6 +23,13 @@ public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleBusinessException(BusinessException ex) {
         return ResponseEntity.badRequest()
                 .body(new CustomExceptionResponse(ex.getMessage(), HttpStatus.BAD_REQUEST.value()));
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<CustomExceptionResponse> handleNotFoundException(NotFoundException exception) {
+        CustomExceptionResponse customException = new CustomExceptionResponse(exception.getMessage(),
+                HttpStatus.NOT_FOUND.value());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(customException);
     }
 
     @Override
