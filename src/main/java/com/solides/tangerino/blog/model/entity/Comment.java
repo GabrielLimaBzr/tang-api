@@ -10,7 +10,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "TB_POST")
+@Table(name = "TB_COMMENT")
 @Getter
 @Setter
 @EntityListeners(AuditingEntityListener.class)

@@ -34,13 +34,13 @@ public class PostController {
     }
 
     @PostMapping("save")
+    @SecurityRequirement(name = "Bearer Authentication")
     public ResponseEntity<SavePostResponseDTO> savePost(@RequestBody @Valid SavePostDTO savePostDTO) throws NotFoundException {
         return ResponseEntity.status(HttpStatus.CREATED).body(postService.savePost(savePostDTO));
     }
 
 
     @GetMapping
-    @SecurityRequirement(name = "Bearer Authentication")
     public ResponseEntity<Page<Post>> getPosts(@RequestParam(required = false) String title,
                                                @PageableDefault(page = 0, size = 10) Pageable pageable)  {
         PostSpecification postSpecification = new PostSpecification();

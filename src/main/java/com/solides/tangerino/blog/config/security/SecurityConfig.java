@@ -64,6 +64,7 @@ public class SecurityConfig {
             "/swagger-ui/**",
             "/users/create",
             "/users/auth",
-            "/post/**"
+            "/post/**",
+            "/comment/**"
     };
 }

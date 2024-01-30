@@ -10,6 +10,7 @@ import com.solides.tangerino.blog.model.entity.User;
 import com.solides.tangerino.blog.model.mapper.PostMapper;
 import com.solides.tangerino.blog.repository.PostRepository;
 import com.solides.tangerino.blog.repository.specification.PostSpecification;
+import com.solides.tangerino.blog.service.UserService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import com.solides.tangerino.blog.repository.UserRepository;
@@ -24,15 +25,13 @@ import java.util.List;
 @AllArgsConstructor
 public class PostServiceImpl implements PostService {
 
-    private final UserRepository userRepository;
+    private final UserService userService;
     private final PostRepository postRepository;
     private final PostMapper postMapper;
 
     @Override
     public CreatePostResponseDTO createPost(CreatePostDTO createPostDTO) throws NotFoundException{
-
-        User user = userRepository.findById(createPostDTO.getUserId())
-                .orElseThrow(() -> new NotFoundException("Usuário não encontrado com o ID fornecido"));
+        User user = userService.getById(createPostDTO.getUserId());
 
         Post post = new Post();
         post.setUser(user);
@@ -46,19 +45,22 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Page<Post> getPosts(PostSpecification postSpecification, Pageable pageable) {
-        Page<Post> resultPosts = postRepository.findAll(postSpecification, pageable);
-        return resultPosts;
+        return postRepository.findAll(postSpecification, pageable);
     }
 
     @Override
     public SavePostResponseDTO savePost(SavePostDTO savePostDTO) throws NotFoundException {
-        Post postCreate = postRepository.findById(savePostDTO.getId())
-                .orElseThrow(() -> new NotFoundException("Post não encontrado com o ID fornecido"));
+        Post postCreate = getById(savePostDTO.getId());
 
         Post postSave = postMapper.SavePostDtoToEntity(savePostDTO);
         postSave.setId(postCreate.getId());
         postSave.setCreated(LocalDateTime.now());
 
         return postMapper.entityToSavePostDto(postRepository.save(postSave));
+    }
+
+    @Override
+    public Post getById(Long id) throws NotFoundException {
+        return postRepository.findById(id).orElseThrow(() -> new NotFoundException("Post não encontrado com o ID fornecido"));
     }
 }

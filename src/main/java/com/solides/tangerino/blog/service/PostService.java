@@ -19,4 +19,6 @@ public interface PostService {
     public Page<Post> getPosts(PostSpecification postSpecification, Pageable pageable);
 
     SavePostResponseDTO savePost(SavePostDTO savePostDTO) throws NotFoundException;
+
+    Post getById(Long id) throws NotFoundException;
 }

@@ -3,6 +3,7 @@ package com.solides.tangerino.blog.service.impl;
 import com.solides.tangerino.blog.dto.CreateUserDTO;
 import com.solides.tangerino.blog.dto.CreateUserResponseDTO;
 import com.solides.tangerino.blog.exceptions.BusinessException;
+import com.solides.tangerino.blog.exceptions.NotFoundException;
 import com.solides.tangerino.blog.model.entity.User;
 import com.solides.tangerino.blog.model.enums.UserRole;
 import com.solides.tangerino.blog.model.mapper.UserMapper;
@@ -38,5 +39,10 @@ public class UserServiceImpl implements UserService {
         result.setLogin(userRepository.save(entity).getLogin());
 
         return result;
+    }
+
+    @Override
+    public User getById(Long userId) throws NotFoundException {
+        return userRepository.findById(userId).orElseThrow(() -> new NotFoundException("Usuario não encontrado para o id fornecido"));
     }
 }
