@@ -4,6 +4,7 @@ import com.solides.tangerino.blog.dto.CreatePostDTO;
 import com.solides.tangerino.blog.dto.CreatePostResponseDTO;
 import com.solides.tangerino.blog.dto.SavePostDTO;
 import com.solides.tangerino.blog.dto.SavePostResponseDTO;
+import com.solides.tangerino.blog.exceptions.BusinessException;
 import com.solides.tangerino.blog.exceptions.NotFoundException;
 import com.solides.tangerino.blog.model.entity.Post;
 import com.solides.tangerino.blog.repository.specification.PostSpecification;
@@ -21,4 +22,6 @@ public interface PostService {
     SavePostResponseDTO savePost(SavePostDTO savePostDTO) throws NotFoundException;
 
     Post getById(Long id) throws NotFoundException;
+
+    void deletePost(long id) throws NotFoundException, BusinessException;
 }

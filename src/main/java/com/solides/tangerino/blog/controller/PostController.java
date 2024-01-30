@@ -4,6 +4,7 @@ import com.solides.tangerino.blog.dto.CreatePostDTO;
 import com.solides.tangerino.blog.dto.CreatePostResponseDTO;
 import com.solides.tangerino.blog.dto.SavePostDTO;
 import com.solides.tangerino.blog.dto.SavePostResponseDTO;
+import com.solides.tangerino.blog.exceptions.BusinessException;
 import com.solides.tangerino.blog.exceptions.NotFoundException;
 import com.solides.tangerino.blog.model.entity.Post;
 import com.solides.tangerino.blog.repository.specification.PostSpecification;
@@ -48,4 +49,10 @@ public class PostController {
         return ResponseEntity.ok().body(postService.getPosts(postSpecification, pageable));
     }
 
+    @DeleteMapping("{id}")
+    @SecurityRequirement(name = "Bearer Authentication")
+    public ResponseEntity deletePost(@PathVariable long id) throws NotFoundException, BusinessException {
+        postService.deletePost(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 }

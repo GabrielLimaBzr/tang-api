@@ -1,25 +1,26 @@
 package com.solides.tangerino.blog.service.impl;
 
+import com.solides.tangerino.blog.config.security.jwt.JwtTokenService;
 import com.solides.tangerino.blog.dto.CreatePostDTO;
 import com.solides.tangerino.blog.dto.CreatePostResponseDTO;
 import com.solides.tangerino.blog.dto.SavePostDTO;
 import com.solides.tangerino.blog.dto.SavePostResponseDTO;
+import com.solides.tangerino.blog.exceptions.BusinessException;
 import com.solides.tangerino.blog.exceptions.NotFoundException;
 import com.solides.tangerino.blog.model.entity.Post;
 import com.solides.tangerino.blog.model.entity.User;
 import com.solides.tangerino.blog.model.mapper.PostMapper;
+import com.solides.tangerino.blog.repository.CommentRepository;
 import com.solides.tangerino.blog.repository.PostRepository;
 import com.solides.tangerino.blog.repository.specification.PostSpecification;
+import com.solides.tangerino.blog.service.PostService;
 import com.solides.tangerino.blog.service.UserService;
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import com.solides.tangerino.blog.repository.UserRepository;
-import com.solides.tangerino.blog.service.PostService;
-import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -28,6 +29,8 @@ public class PostServiceImpl implements PostService {
     private final UserService userService;
     private final PostRepository postRepository;
     private final PostMapper postMapper;
+    private final JwtTokenService jwtTokenService;
+    private final CommentRepository commentRepository;
 
     @Override
     public CreatePostResponseDTO createPost(CreatePostDTO createPostDTO) throws NotFoundException{
@@ -62,5 +65,19 @@ public class PostServiceImpl implements PostService {
     @Override
     public Post getById(Long id) throws NotFoundException {
         return postRepository.findById(id).orElseThrow(() -> new NotFoundException("Post não encontrado com o ID fornecido"));
+    }
+
+    @Override
+    public void deletePost(long id) throws NotFoundException, BusinessException {
+        Post post = getById(id);
+        User userCurrent = jwtTokenService.getUserCurrent();
+        if(!post.getUser().getId().equals(userCurrent.getId())){
+            throw new BusinessException("Apenas o criador do POST pode excluir");
+        }
+
+        if (!commentRepository.findByPost(post).isEmpty()) {
+            commentRepository.deleteByPost(post.getId());
+        }
+        postRepository.delete(post);
     }
 }

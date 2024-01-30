@@ -62,7 +62,7 @@ public class CommentServiceImpl implements CommentService {
         Comment comment = getById(id);
         User userCurrent = jwtTokenService.getUserCurrent();
         if(!comment.getUser().getId().equals(userCurrent.getId())){
-            throw new BusinessException("Apenas o criado do usario pode excluir o comentário");
+            throw new BusinessException("Apenas o criador do Comentario pode excluir");
         }
         commentRepository.delete(comment);
     }
