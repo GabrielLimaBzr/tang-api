@@ -6,6 +6,7 @@ import com.solides.tangerino.blog.config.security.jwt.JwtSecurityFilter;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -34,6 +35,7 @@ public class SecurityConfig {
                 .headers(headers -> headers.frameOptions(frameOptionsConfig -> frameOptionsConfig.disable()))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(HttpMethod.GET, "/**").permitAll()
                         .requestMatchers(AUTH_WHITELIST).permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(this.jwtSecurityFilter, UsernamePasswordAuthenticationFilter.class)
@@ -63,8 +65,6 @@ public class SecurityConfig {
             "/swagger-ui.html",
             "/swagger-ui/**",
             "/users/create",
-            "/users/auth",
-            "/post/**",
-            "/comment/**"
+            "/users/auth"
     };
 }

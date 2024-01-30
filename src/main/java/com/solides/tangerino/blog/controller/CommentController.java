@@ -3,6 +3,7 @@ package com.solides.tangerino.blog.controller;
 import com.solides.tangerino.blog.dto.CommentByPostResponseDTO;
 import com.solides.tangerino.blog.dto.CreateCommentDTO;
 import com.solides.tangerino.blog.dto.CreateCommentResponseDTO;
+import com.solides.tangerino.blog.exceptions.BusinessException;
 import com.solides.tangerino.blog.exceptions.NotFoundException;
 import com.solides.tangerino.blog.service.CommentService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -33,4 +34,10 @@ public class CommentController {
         return ResponseEntity.status(HttpStatus.OK).body(commentService.listCommentsByPost(id));
     }
 
+    @DeleteMapping("{id}")
+    @SecurityRequirement(name = "Bearer Authentication")
+    public ResponseEntity deleteComment(@PathVariable Long id) throws NotFoundException, BusinessException {
+        commentService.deleteComment(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 }

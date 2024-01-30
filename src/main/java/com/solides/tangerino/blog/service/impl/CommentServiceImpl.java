@@ -1,8 +1,10 @@
 package com.solides.tangerino.blog.service.impl;
 
+import com.solides.tangerino.blog.config.security.jwt.JwtTokenService;
 import com.solides.tangerino.blog.dto.CommentByPostResponseDTO;
 import com.solides.tangerino.blog.dto.CreateCommentDTO;
 import com.solides.tangerino.blog.dto.CreateCommentResponseDTO;
+import com.solides.tangerino.blog.exceptions.BusinessException;
 import com.solides.tangerino.blog.exceptions.NotFoundException;
 import com.solides.tangerino.blog.model.entity.Comment;
 import com.solides.tangerino.blog.model.entity.Post;
@@ -25,6 +27,7 @@ public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
     private final PostService postService;
     private final UserService userService;
+    private final JwtTokenService jwtTokenService;
     private final CommentMapper commentMapper;
 
     @Override
@@ -49,5 +52,18 @@ public class CommentServiceImpl implements CommentService {
         return comments.stream()
                 .map(commentMapper::entityToCommentPostDto)
                 .collect(Collectors.toList());
+    }
+
+    public Comment getById(Long id) throws NotFoundException{
+        return commentRepository.findById(id).orElseThrow(() -> new NotFoundException("Comentário não encontrado para o id informado."));
+    }
+    @Override
+    public void deleteComment(Long id) throws BusinessException, NotFoundException{
+        Comment comment = getById(id);
+        User userCurrent = jwtTokenService.getUserCurrent();
+        if(!comment.getUser().getId().equals(userCurrent.getId())){
+            throw new BusinessException("Apenas o criado do usario pode excluir o comentário");
+        }
+        commentRepository.delete(comment);
     }
 }
