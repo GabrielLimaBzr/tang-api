@@ -11,12 +11,12 @@ public class CreateUserDTO {
 
     @Pattern(regexp = "^[a-z0-9._-]+$", message = "Nome de usuário inválido, deverá conter apenas letras minúsculas, números e alguns caracteres especiais")
     @Schema(description = "Login do usuário", example = "loginuser10")
-    @Size(max = 100, message = "Login deverá ter no máximo 100 caracteres")
+    @Size(min = 3, max = 100, message = "Login deverá ter no máximo 100 caracteres e no minimo 3")
     private String login;
 
     @Schema(description = "Nome do usuário, máximo 100 caracteres", example = "Jose Silva")
     @NotEmpty(message = "O campo nome é obrigatório")
-    @Size(max = 100, message = "Nome de usuário deverá ter no máximo 100 caracteres")
+    @Size(max = 100, message = "Nome de usuário deverá ter no máximo 100 caracteres e no minimo 3")
     private String name;
 
     @NotEmpty(message = "O campo email é obrigatório")
@@ -24,5 +24,6 @@ public class CreateUserDTO {
     @Email(message = "Email inválido")
     private String email;
 
+    @Size(min = 3, max = 100, message = "Senha deverá ter no máximo 100 caracteres e no minimo 3")
     private String passphrase;
 }
