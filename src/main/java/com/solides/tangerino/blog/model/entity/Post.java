@@ -9,6 +9,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Entity
 @Table(name = "TB_POST")
@@ -40,5 +41,11 @@ public class Post {
     @JsonIgnore
     @Column(name = "DT_CREATED")
     private LocalDateTime created;
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "TB_POST_FILE",
+            joinColumns = @JoinColumn(name = "INT_ID_POST"),
+            inverseJoinColumns = @JoinColumn(name = "INT_ID_FILE"))
+    private Set<File> postFiles;
 
 }

@@ -17,7 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("comment")
-@Tag(name = "Comment")
+@Tag(name = "COMMENT")
 @AllArgsConstructor
 public class CommentController {
 

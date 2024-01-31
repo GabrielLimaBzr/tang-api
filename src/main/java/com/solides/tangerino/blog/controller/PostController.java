@@ -6,6 +6,7 @@ import com.solides.tangerino.blog.dto.SavePostDTO;
 import com.solides.tangerino.blog.dto.SavePostResponseDTO;
 import com.solides.tangerino.blog.exceptions.BusinessException;
 import com.solides.tangerino.blog.exceptions.NotFoundException;
+import com.solides.tangerino.blog.model.entity.File;
 import com.solides.tangerino.blog.model.entity.Post;
 import com.solides.tangerino.blog.repository.specification.PostSpecification;
 import com.solides.tangerino.blog.service.PostService;
@@ -17,8 +18,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
 @RestController
 @RequestMapping("post")
@@ -40,6 +47,32 @@ public class PostController {
         return ResponseEntity.status(HttpStatus.CREATED).body(postService.savePost(savePostDTO));
     }
 
+    @PostMapping(value = "save", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @SecurityRequirement(name = "Bearer Authentication")
+    public ResponseEntity<SavePostResponseDTO> publish(
+            @RequestPart("post") @Valid SavePostDTO savePostDTO,
+            @RequestPart("file") MultipartFile[] file) throws NotFoundException, BusinessException {
+        try {
+            Set<File> files = uploadFile(file);
+            savePostDTO.setPostFiles(files);
+            return ResponseEntity.status(HttpStatus.CREATED).body(postService.savePost(savePostDTO));
+        }catch (Exception e){
+            throw new BusinessException(e.getMessage());
+        }
+    }
+
+    private Set<File> uploadFile(MultipartFile[] multipartFiles) throws IOException {
+        Set<File> fileModels = new HashSet<>();
+        for (MultipartFile file : multipartFiles) {
+           File fileModel = new File(
+                   file.getOriginalFilename(),
+                   file.getContentType(),
+                   file.getBytes()
+           );
+           fileModels.add(fileModel);
+        }
+        return fileModels;
+    }
 
     @GetMapping
     public ResponseEntity<Page<Post>> getPosts(@RequestParam(required = false) String title,

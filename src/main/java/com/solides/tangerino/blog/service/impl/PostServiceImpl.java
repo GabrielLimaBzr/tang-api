@@ -9,6 +9,7 @@ import com.solides.tangerino.blog.exceptions.BusinessException;
 import com.solides.tangerino.blog.exceptions.NotFoundException;
 import com.solides.tangerino.blog.model.entity.Post;
 import com.solides.tangerino.blog.model.entity.User;
+import com.solides.tangerino.blog.model.enums.PostStatus;
 import com.solides.tangerino.blog.model.mapper.PostMapper;
 import com.solides.tangerino.blog.repository.CommentRepository;
 import com.solides.tangerino.blog.repository.PostRepository;
@@ -58,6 +59,7 @@ public class PostServiceImpl implements PostService {
         Post postSave = postMapper.SavePostDtoToEntity(savePostDTO);
         postSave.setId(postCreate.getId());
         postSave.setCreated(LocalDateTime.now());
+        postSave.setStatus(PostStatus.PUBLISHED);
 
         return postMapper.entityToSavePostDto(postRepository.save(postSave));
     }
