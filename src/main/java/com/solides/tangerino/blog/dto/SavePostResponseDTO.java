@@ -8,7 +8,11 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class SavePostResponseDTO extends CreatePostResponseDTO {
+public class SavePostResponseDTO {
+
+    private Long id;
+
+    private String title;
 
     private PostStatus status;
 

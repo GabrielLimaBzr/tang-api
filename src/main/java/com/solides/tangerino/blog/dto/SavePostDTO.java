@@ -1,7 +1,7 @@
 package com.solides.tangerino.blog.dto;
 
 import com.solides.tangerino.blog.model.entity.File;
-import jakarta.validation.constraints.NotNull;
+import com.solides.tangerino.blog.model.enums.PostStatus;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,12 +9,11 @@ import java.util.Set;
 
 @Getter
 @Setter
-public class SavePostDTO extends CreatePostDTO {
-
-    @NotNull(message = "Id não pode ser nulo")
-    private long id;
+public class SavePostDTO {
 
     private String content;
+
+    private String title;
 
     private Set<File> postFiles;
 }

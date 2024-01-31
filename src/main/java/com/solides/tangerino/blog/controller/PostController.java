@@ -1,9 +1,6 @@
 package com.solides.tangerino.blog.controller;
 
-import com.solides.tangerino.blog.dto.CreatePostDTO;
-import com.solides.tangerino.blog.dto.CreatePostResponseDTO;
-import com.solides.tangerino.blog.dto.SavePostDTO;
-import com.solides.tangerino.blog.dto.SavePostResponseDTO;
+import com.solides.tangerino.blog.dto.*;
 import com.solides.tangerino.blog.exceptions.BusinessException;
 import com.solides.tangerino.blog.exceptions.NotFoundException;
 import com.solides.tangerino.blog.model.entity.File;
@@ -25,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -35,11 +33,11 @@ public class PostController {
 
     private final PostService postService;
 
-    @PostMapping("create")
-    @SecurityRequirement(name = "Bearer Authentication")
-    public ResponseEntity<CreatePostResponseDTO> createPost(@RequestBody @Valid CreatePostDTO createPostDTO) throws NotFoundException {
-        return ResponseEntity.status(HttpStatus.CREATED).body(postService.createPost(createPostDTO));
-    }
+//    @PostMapping("create")
+//    @SecurityRequirement(name = "Bearer Authentication")
+//    public ResponseEntity<CreatePostResponseDTO> createPost(@RequestBody @Valid CreatePostDTO createPostDTO) throws NotFoundException {
+//        return ResponseEntity.status(HttpStatus.CREATED).body(postService.createPost(createPostDTO));
+//    }
 
     @PostMapping("save")
     @SecurityRequirement(name = "Bearer Authentication")
@@ -87,5 +85,10 @@ public class PostController {
     public ResponseEntity deletePost(@PathVariable long id) throws NotFoundException, BusinessException {
         postService.deletePost(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @GetMapping("all-resume-posts")
+    public ResponseEntity<List<ResumePostDTO>>  getAllPostResume() {
+        return ResponseEntity.status(HttpStatus.OK).body(postService.getAllPostResume());
     }
 }
